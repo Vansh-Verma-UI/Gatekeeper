@@ -1,0 +1,281 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Gatekeeper | Role-Based Authentication</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="wrap">
+
+    <h1>Gatekeeper</h1>
+
+    <p class="sub">
+        A role-based authentication system built using JWT
+        and microservices architecture.
+    </p>
+
+    <div class="grid">
+
+        <!-- LEFT COLUMN -->
+        <div class="col">
+
+            <!-- AUTHENTICATION CARD -->
+            <div class="card" id="authCard">
+
+                <div class="tabs">
+                    <button class="active">Sign in</button>
+                    <button>Create account</button>
+                </div>
+
+                <form>
+
+                    <label for="name">Name</label>
+                    <input type="text" id="name" placeholder="Enter your name">
+
+                    <label for="email">Email</label>
+                    <input type="email" id="email" placeholder="Enter your email">
+
+                    <label for="password">Password</label>
+                    <input type="password" id="password" placeholder="Enter password">
+
+                    <div class="err"></div>
+
+                    <div class="row">
+                        <button class="p" type="submit">Sign in</button>
+                    </div>
+
+                </form>
+
+                <div class="demo">
+                    Demo accounts:
+
+                    <button type="button">Admin</button>
+                    <button type="button">Manager</button>
+                    <button type="button">User</button>
+                </div>
+
+            </div>
+
+            <!-- ACCESS MATRIX -->
+            <div class="card">
+
+                <h2>Access Matrix</h2>
+
+                <div class="tw">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Route</th>
+                                <th>User</th>
+                                <th>Manager</th>
+                                <th>Admin</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr>
+                                <td>/api/profile</td>
+                                <td>✓</td>
+                                <td>✓</td>
+                                <td>✓</td>
+                            </tr>
+
+                            <tr>
+                                <td>/api/reports/sales</td>
+                                <td>–</td>
+                                <td>✓</td>
+                                <td>✓</td>
+                            </tr>
+
+                            <tr>
+                                <td>/api/users</td>
+                                <td>–</td>
+                                <td>–</td>
+                                <td>✓</td>
+                            </tr>
+
+                            <tr>
+                                <td>/api/users/:id/role</td>
+                                <td>–</td>
+                                <td>–</td>
+                                <td>✓</td>
+                            </tr>
+
+                            <tr>
+                                <td>/api/users/:id</td>
+                                <td>–</td>
+                                <td>–</td>
+                                <td>✓</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- RIGHT COLUMN -->
+        <div class="col">
+
+            <!-- SERVICES -->
+            <div class="card">
+
+                <h2>Services</h2>
+
+                <div class="svc">
+
+                    <div>
+                        <b>API Gateway</b>
+                        <span>Verifies JWT</span>
+                    </div>
+
+                    <div>
+                        <b>Auth Service</b>
+                        <span>Login and tokens</span>
+                    </div>
+
+                    <div>
+                        <b>User Service</b>
+                        <span>Profiles and roles</span>
+                    </div>
+
+                    <div>
+                        <b>Report Service</b>
+                        <span>Sales reports</span>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- ACCESS TOKEN -->
+            <div class="card">
+
+                <h2>Access Token</h2>
+
+                <div class="tok">
+                    <span class="h">HEADER</span>.
+                    <span class="p">PAYLOAD</span>.
+                    <span class="s">SIGNATURE</span>
+                </div>
+
+                <pre>{
+  "alg": "HS256",
+  "typ": "JWT"
+}
+
+{
+  "sub": "user_id",
+  "email": "user@demo.dev",
+  "role": "user",
+  "iss": "auth-service",
+  "exp": "expiry_time"
+}</pre>
+
+                <p class="demo">
+                    Expires in: <b>60 seconds</b>
+                </p>
+
+            </div>
+
+
+            <!-- API GATEWAY -->
+            <div class="card">
+
+                <h2>Call the Gateway</h2>
+
+                <div class="controls">
+
+                    <div>
+                        <label for="route">Route</label>
+
+                        <select id="route">
+                            <option>GET /api/profile</option>
+                            <option>GET /api/reports/sales</option>
+                            <option>GET /api/users</option>
+                            <option>PATCH /api/users/:id/role</option>
+                            <option>DELETE /api/users/:id</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label for="target">Target User</label>
+
+                        <select id="target">
+                            <option>Admin</option>
+                            <option>Manager</option>
+                            <option>User</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label for="newRole">New Role</label>
+
+                        <select id="newRole">
+                            <option>User</option>
+                            <option>Manager</option>
+                            <option>Admin</option>
+                        </select>
+                    </div>
+
+                </div>
+
+                <div class="row">
+                    <button class="p" type="button">Send Request</button>
+                    <button type="button">Clear Log</button>
+                </div>
+
+                <pre>Response body appears here.</pre>
+
+                <div class="tw log-table">
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Time</th>
+                                <th>Request</th>
+                                <th>Service</th>
+                                <th>Status</th>
+                                <th>Reason</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr>
+                                <td>12:00 PM</td>
+                                <td>GET /api/profile</td>
+                                <td>User Service</td>
+                                <td>200</td>
+                                <td>Authorized</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+<script src="script.js"></script>
+
+</body>
+</html>
